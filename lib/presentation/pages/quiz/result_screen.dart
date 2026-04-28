@@ -9,28 +9,46 @@ import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
 import '../home/main_shell.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends StatefulWidget {
   final QuizResultEntity result;
   final SubjectEntity subject;
   const ResultScreen({super.key, required this.result, required this.subject});
 
   @override
+ State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  bool _xpUpdateSent = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _xpUpdateSent) return;
+      final authState = context.read<AuthBloc>().state;
+      if (authState is! AuthAuthenticated) return;
+
+      final isGood = widget.result.scorePct >= 70;
+      final xpEarned = widget.result.correct * 50;
+      final updatedUser = authState.user.copyWith(
+        xpPoints: authState.user.xpPoints + xpEarned,
+        trophyCount: isGood
+            ? authState.user.trophyCount + 1
+            : authState.user.trophyCount,
+      );
+
+      context.read<AuthBloc>().add(UpdateUserRequested(updatedUser));
+      _xpUpdateSent = true;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final result = widget.result;
+    final subject = widget.subject;
     final pct = result.scorePct;
     final isGood = pct >= 70;
-
-    // Update user XP in auth state
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final authState = context.read<AuthBloc>().state;
-      if (authState is AuthAuthenticated) {
-        final xpEarned = result.correct * 50;
-        final updatedUser = authState.user.copyWith(
-          xpPoints: authState.user.xpPoints + xpEarned,
-          trophyCount: isGood ? authState.user.trophyCount + 1 : authState.user.trophyCount,
-        );
-        context.read<AuthBloc>().add(UpdateProfileRequested(updatedUser.name));
-      }
-    });
 
     return Scaffold(
       body: Container(
