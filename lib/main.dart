@@ -1,4 +1,6 @@
 // lib/main.dart
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quize_app/core/services/notification_service.dart';
@@ -11,10 +13,17 @@ import 'presentation/pages/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
-  await NotificationService.instance.requestPermission();
-  // await NotificationService.instance.showStreakNotification(20);
-  await NotificationService.instance.init();
   runApp(const TshsQuizApp());
+  unawaited(_initNotifications());
+}
+
+Future<void> _initNotifications() async {
+  try {
+    await NotificationService.instance.init();
+    await NotificationService.instance.requestPermission();
+  } catch (e) {
+    debugPrint('Notification initialization failed: $e');
+  }
 }
 
 class TshsQuizApp extends StatelessWidget {
