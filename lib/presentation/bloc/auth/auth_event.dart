@@ -1,5 +1,6 @@
 // lib/presentation/bloc/auth/auth_event.dart
 import 'package:equatable/equatable.dart';
+import '../../../domain/entities/user_entity.dart';
 
 abstract class AuthEvent extends Equatable {
   @override
@@ -31,3 +32,10 @@ class UpdateProfileRequested extends AuthEvent {
   List<Object?> get props => [name];
 }
 
+class UpdateUserRequested extends AuthEvent {
+  final UserEntity user;
+  UpdateUserRequested(this.user);
+
+  @override
+  List<Object?> get props => [user];
+}
