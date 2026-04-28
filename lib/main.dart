@@ -1,6 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quize_app/core/services/notification_service.dart';
 import 'core/constants/app_theme.dart';
 import 'core/core/di/injection.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
@@ -10,6 +11,9 @@ import 'presentation/pages/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
+  await NotificationService.instance.requestPermission();
+  // await NotificationService.instance.showStreakNotification(20);
+  await NotificationService.instance.init();
   runApp(const TshsQuizApp());
 }
 

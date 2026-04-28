@@ -1,6 +1,7 @@
 // lib/presentation/pages/home/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quize_app/presentation/pages/chatbot/chatbot_screen.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../bloc/auth/auth_bloc.dart';
 
@@ -253,6 +254,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => ChatScreen()),
+            ),
+            backgroundColor: AppColors.purple,
+            child: const Icon(Icons.chat, color: Colors.white),
           ),
         );
       },

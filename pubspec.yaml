@@ -84,6 +84,7 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/icons/icon.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
+  icon_size_ios: 200 # ios icon size min:180, default 180
   web:
     generate: true
     image_path: "path/to/image.png"

@@ -23,4 +23,9 @@ class AppConstants {
   static const String homeRoute = '/home';
   static const String quizRoute = '/quiz';
   static const String resultRoute = '/result';
+  static const String subjectsRoute = '/subjects';
+  static const String profileRoute = '/profile';
+  static const String favoritesRoute = '/favorites';
+  static const String chatbotRoute = '/chatbot';
+  
 }
