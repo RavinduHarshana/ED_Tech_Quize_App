@@ -3,8 +3,7 @@
 class AppConstants {
   // Database
   static const String dbName = 'tshs_quiz.db';
-  // static const int dbVersion = 1;
-  static const int dbVersion = 2;
+  static const int dbVersion = 3;
 
   // Tables
   static const String usersTable = 'users';
@@ -27,5 +26,4 @@ class AppConstants {
   static const String profileRoute = '/profile';
   static const String favoritesRoute = '/favorites';
   static const String chatbotRoute = '/chatbot';
-  
 }
