@@ -8,6 +8,7 @@ class UserEntity extends Equatable {
   final String passwordHash;
   final String? avatarPath;
   final int xpPoints;
+  final int role; // 0 = user, 1 = admin
   final int trophyCount;
   final String createdAt;
 
@@ -18,6 +19,7 @@ class UserEntity extends Equatable {
     required this.passwordHash,
     this.avatarPath,
     this.xpPoints = 0,
+    this.role = 0,
     this.trophyCount = 0,
     required this.createdAt,
   });
@@ -29,6 +31,7 @@ class UserEntity extends Equatable {
     String? passwordHash,
     String? avatarPath,
     int? xpPoints,
+    int? role,
     int? trophyCount,
     String? createdAt,
   }) {
@@ -39,11 +42,14 @@ class UserEntity extends Equatable {
       passwordHash: passwordHash ?? this.passwordHash,
       avatarPath: avatarPath ?? this.avatarPath,
       xpPoints: xpPoints ?? this.xpPoints,
+      role: role ?? this.role,
       trophyCount: trophyCount ?? this.trophyCount,
       createdAt: createdAt ?? this.createdAt,
     );
   }
 
+  bool get isAdmin => role == 1;
+
   @override
-  List<Object?> get props => [id, name, email, xpPoints, trophyCount];
+  List<Object?> get props => [id, name, email, xpPoints, role, trophyCount];
 }
