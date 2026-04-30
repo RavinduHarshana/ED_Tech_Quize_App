@@ -1,6 +1,6 @@
 // lib/data/models/user_model.dart
 import '../../domain/entities/user_entity.dart';
- 
+
 class UserModel extends UserEntity {
   const UserModel({
     super.id,
@@ -9,10 +9,11 @@ class UserModel extends UserEntity {
     required super.passwordHash,
     super.avatarPath,
     super.xpPoints,
+    super.role,
     super.trophyCount,
     required super.createdAt,
   });
- 
+
   factory UserModel.fromMap(Map<String, dynamic> map) => UserModel(
     id: map['id'] as int?,
     name: map['name'] as String,
@@ -20,10 +21,11 @@ class UserModel extends UserEntity {
     passwordHash: map['password_hash'] as String,
     avatarPath: map['avatar_path'] as String?,
     xpPoints: map['xp_points'] as int? ?? 0,
+    role: map['role'] as int? ?? 0,
     trophyCount: map['trophy_count'] as int? ?? 0,
     createdAt: map['created_at'] as String,
   );
- 
+
   Map<String, dynamic> toMap() => {
     if (id != null) 'id': id,
     'name': name,
@@ -31,10 +33,11 @@ class UserModel extends UserEntity {
     'password_hash': passwordHash,
     'avatar_path': avatarPath,
     'xp_points': xpPoints,
+    'role': role,
     'trophy_count': trophyCount,
     'created_at': createdAt,
   };
- 
+
   factory UserModel.fromEntity(UserEntity entity) => UserModel(
     id: entity.id,
     name: entity.name,
@@ -42,6 +45,7 @@ class UserModel extends UserEntity {
     passwordHash: entity.passwordHash,
     avatarPath: entity.avatarPath,
     xpPoints: entity.xpPoints,
+    role: entity.role,
     trophyCount: entity.trophyCount,
     createdAt: entity.createdAt,
   );
