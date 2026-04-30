@@ -6,7 +6,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/utils/validators.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
-import '../home/main_shell.dart';
+import 'auth_destination.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -44,17 +44,18 @@ class _RegisterPageState extends State<RegisterPage> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const MainShell()),
-            (_) => false,
-          );
+          Navigator.of(
+            context,
+          ).pushAndRemoveUntil(routeForUser(state.user), (_) => false);
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
               backgroundColor: AppColors.wrong,
               behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
           );
         }
@@ -81,9 +82,17 @@ class _RegisterPageState extends State<RegisterPage> {
                         GestureDetector(
                           onTap: () => Navigator.pop(context),
                           child: Container(
-                            width: 40, height: 40,
-                            decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(12)),
-                            child: const Icon(Icons.chevron_left_rounded, color: Colors.white, size: 24),
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.white24,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              Icons.chevron_left_rounded,
+                              color: Colors.white,
+                              size: 24,
+                            ),
                           ),
                         ),
                       ],
@@ -95,7 +104,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Create\nAccount ✨',
-                        style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900, height: 1.2),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.w900,
+                          height: 1.2,
+                        ),
                       ),
                     ),
                   ),
@@ -106,7 +120,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       padding: const EdgeInsets.all(28),
                       decoration: const BoxDecoration(
                         color: AppColors.bg,
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(32),
+                        ),
                       ),
                       child: Form(
                         key: _formKey,
@@ -119,7 +135,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 validator: Validators.validateName,
                                 decoration: const InputDecoration(
                                   labelText: 'Full Name',
-                                  prefixIcon: Icon(Icons.person_outline, color: AppColors.purple),
+                                  prefixIcon: Icon(
+                                    Icons.person_outline,
+                                    color: AppColors.purple,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -129,7 +148,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 validator: Validators.validateEmail,
                                 decoration: const InputDecoration(
                                   labelText: 'Email',
-                                  prefixIcon: Icon(Icons.email_outlined, color: AppColors.purple),
+                                  prefixIcon: Icon(
+                                    Icons.email_outlined,
+                                    color: AppColors.purple,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -139,10 +161,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                 validator: Validators.validatePassword,
                                 decoration: InputDecoration(
                                   labelText: 'Password',
-                                  prefixIcon: const Icon(Icons.lock_outline, color: AppColors.purple),
+                                  prefixIcon: const Icon(
+                                    Icons.lock_outline,
+                                    color: AppColors.purple,
+                                  ),
                                   suffixIcon: IconButton(
-                                    icon: Icon(_obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textGrey),
-                                    onPressed: () => setState(() => _obscure = !_obscure),
+                                    icon: Icon(
+                                      _obscure
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      color: AppColors.textGrey,
+                                    ),
+                                    onPressed: () =>
+                                        setState(() => _obscure = !_obscure),
                                   ),
                                 ),
                               ),
@@ -150,38 +181,78 @@ class _RegisterPageState extends State<RegisterPage> {
                               TextFormField(
                                 controller: _confirmCtrl,
                                 obscureText: _obscureConfirm,
-                                validator: (v) => Validators.validateConfirmPassword(v, _passCtrl.text),
+                                validator: (v) =>
+                                    Validators.validateConfirmPassword(
+                                      v,
+                                      _passCtrl.text,
+                                    ),
                                 decoration: InputDecoration(
                                   labelText: 'Confirm Password',
-                                  prefixIcon: const Icon(Icons.lock_outline, color: AppColors.purple),
+                                  prefixIcon: const Icon(
+                                    Icons.lock_outline,
+                                    color: AppColors.purple,
+                                  ),
                                   suffixIcon: IconButton(
-                                    icon: Icon(_obscureConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textGrey),
-                                    onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
+                                    icon: Icon(
+                                      _obscureConfirm
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      color: AppColors.textGrey,
+                                    ),
+                                    onPressed: () => setState(
+                                      () => _obscureConfirm = !_obscureConfirm,
+                                    ),
                                   ),
                                 ),
                               ),
                               const SizedBox(height: 28),
                               SizedBox(
-                                width: double.infinity, height: 54,
+                                width: double.infinity,
+                                height: 54,
                                 child: ElevatedButton(
                                   onPressed: isLoading ? null : _submit,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.purple,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
                                   ),
                                   child: isLoading
-                                      ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                                      : const Text('Create Account', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white)),
+                                      ? const SizedBox(
+                                          width: 24,
+                                          height: 24,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                      : const Text(
+                                          'Create Account',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                 ),
                               ),
                               const SizedBox(height: 16),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text('Already have an account? ', style: TextStyle(color: AppColors.textGrey)),
+                                  const Text(
+                                    'Already have an account? ',
+                                    style: TextStyle(color: AppColors.textGrey),
+                                  ),
                                   GestureDetector(
                                     onTap: () => Navigator.pop(context),
-                                    child: const Text('Sign In', style: TextStyle(color: AppColors.purple, fontWeight: FontWeight.bold)),
+                                    child: const Text(
+                                      'Sign In',
+                                      style: TextStyle(
+                                        color: AppColors.purple,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
