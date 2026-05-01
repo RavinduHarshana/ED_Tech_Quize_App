@@ -1,20 +1,3 @@
-# quize_app
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
 # TSHS Quiz App — Flutter Clean Architecture
 
 A full-featured quiz application built with **Flutter**, **BLoC**, **SQLite (sqflite)**, and **Clean Architecture** principles.
@@ -244,13 +227,4 @@ On first launch the database is seeded with **6 subjects** and **27 questions**:
 
 ## Adding Questions
 
-Insert rows into the `questions` table with the correct `subject_id`:
-
-```dart
-// In database_helper.dart → _seedQuestions()
-{'subject_id': 1, 'text': 'Your question?',
- 'option_a': 'A', 'option_b': 'B', 'option_c': 'C', 'option_d': 'D',
- 'correct_index': 0},  // 0=A, 1=B, 2=C, 3=D
-```
-
-Or at runtime via `DatabaseHelper().insert(AppConstants.questionsTable, {...})`.
+Using the admin panel, add questions that the admin can manage questions and subjects
