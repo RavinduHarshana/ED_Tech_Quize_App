@@ -1,6 +1,6 @@
 // lib/data/models/question_model.dart
 import '../../domain/entities/question_entity.dart';
- 
+
 class QuestionModel extends QuestionEntity {
   const QuestionModel({
     super.id,
@@ -9,7 +9,7 @@ class QuestionModel extends QuestionEntity {
     required super.options,
     required super.correctIndex,
   });
- 
+
   factory QuestionModel.fromMap(Map<String, dynamic> map) => QuestionModel(
     id: map['id'] as int?,
     subjectId: map['subject_id'] as int,
@@ -22,7 +22,15 @@ class QuestionModel extends QuestionEntity {
     ],
     correctIndex: map['correct_index'] as int,
   );
- 
+
+  factory QuestionModel.fromEntity(QuestionEntity entity) => QuestionModel(
+    id: entity.id,
+    subjectId: entity.subjectId,
+    text: entity.text,
+    options: entity.options,
+    correctIndex: entity.correctIndex,
+  );
+
   Map<String, dynamic> toMap() => {
     if (id != null) 'id': id,
     'subject_id': subjectId,

@@ -5,7 +5,7 @@ import '../bloc/auth/auth_bloc.dart';
 import '../bloc/auth/auth_event.dart';
 import '../bloc/auth/auth_state.dart';
 import 'auth/login_page.dart';
-import 'home/main_shell.dart';
+import 'auth/auth_destination.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -53,9 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const MainShell()),
-          );
+          Navigator.of(context).pushReplacement(routeForUser(state.user));
         } else if (state is AuthUnauthenticated) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (_) => const LoginPage()),

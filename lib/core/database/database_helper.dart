@@ -2,6 +2,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../constants/app_constants.dart';
+import '../utils/hash_util.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -22,7 +23,11 @@ class DatabaseHelper {
     return await openDatabase(
       path,
       version: AppConstants.dbVersion,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -37,6 +42,7 @@ class DatabaseHelper {
         avatar_path TEXT,
         xp_points INTEGER DEFAULT 0,
         trophy_count INTEGER DEFAULT 0,
+        role INTEGER DEFAULT 0,
         created_at TEXT NOT NULL
       )
     ''');
@@ -101,15 +107,58 @@ class DatabaseHelper {
     await _seedDefaultUsers(db);
   }
 
-  Future<void> _seedDefaultUsers(Database db) async {
-    await db.insert(AppConstants.usersTable, {
-      'name': 'User',
-      'email': 'user@example.com',
-      'password_hash': '124',
-      'xp_points': 100,
-      'trophy_count': 5,
-      'created_at': DateTime.now().toIso8601String(),
-    });
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 3) {
+      await db.execute(
+        'ALTER TABLE ${AppConstants.usersTable} ADD COLUMN role INTEGER DEFAULT 0',
+      );
+      await db.update(
+        AppConstants.usersTable,
+        {'password_hash': HashUtil.hashPassword('124'), 'role': 0},
+        where: 'email = ?',
+        whereArgs: ['user@example.com'],
+      );
+    }
+    await _seedDefaultUsers(db, overwrite: false);
+  }
+
+  Future<void> _seedDefaultUsers(Database db, {bool overwrite = true}) async {
+    if (overwrite) {
+      await db.delete(AppConstants.usersTable);
+    }
+
+    final now = DateTime.now().toIso8601String();
+    final users = [
+      {
+        'name': 'User',
+        'email': 'user@example.com',
+        'password_hash': HashUtil.hashPassword('124'),
+        'xp_points': 100,
+        'trophy_count': 5,
+        'role': 0,
+        'created_at': now,
+      },
+      {
+        'name': 'Admin',
+        'email': 'admin@example.com',
+        'password_hash': HashUtil.hashPassword('admin123'),
+        'xp_points': 0,
+        'trophy_count': 0,
+        'role': 1,
+        'created_at': now,
+      },
+    ];
+
+    for (final user in users) {
+      final exists = await db.query(
+        AppConstants.usersTable,
+        where: 'email = ?',
+        whereArgs: [user['email']],
+      );
+      if (exists.isEmpty) {
+        await db.insert(AppConstants.usersTable, user);
+      }
+    }
   }
 
   Future<void> _seedSubjects(Database db) async {

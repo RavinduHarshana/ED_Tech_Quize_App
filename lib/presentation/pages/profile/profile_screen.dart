@@ -322,7 +322,7 @@ class _MenuCard extends StatelessWidget {
     decoration: BoxDecoration(
       color: AppColors.cardBg,
       borderRadius: BorderRadius.circular(16),
-      boxShadow: [BoxShadow(color: Colors.black.withOpacity(.04), blurRadius: 10)],
+      boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: .04), blurRadius: 10)],
     ),
     child: Column(
       children: items.asMap().entries.map((e) {

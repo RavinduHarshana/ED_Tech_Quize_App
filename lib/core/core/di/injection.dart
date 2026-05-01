@@ -26,9 +26,15 @@ Future<void> initDependencies() async {
 
   // ── Repositories ──────────────────────────────
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
-  sl.registerLazySingleton<SubjectRepository>(() => SubjectRepositoryImpl(sl()));
-  sl.registerLazySingleton<QuestionRepository>(() => QuestionRepositoryImpl(sl()));
-  sl.registerLazySingleton<QuizResultRepository>(() => QuizResultRepositoryImpl(sl()));
+  sl.registerLazySingleton<SubjectRepository>(
+    () => SubjectRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton<QuestionRepository>(
+    () => QuestionRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton<QuizResultRepository>(
+    () => QuizResultRepositoryImpl(sl()),
+  );
 
   // ── Use Cases ─────────────────────────────────
   sl.registerLazySingleton(() => LoginUseCase(sl()));
@@ -38,10 +44,19 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => UpdateUserUseCase(sl()));
 
   sl.registerLazySingleton(() => GetAllSubjectsUseCase(sl()));
+  sl.registerLazySingleton(() => GetSubjectByIdUseCase(sl()));
+  sl.registerLazySingleton(() => CreateSubjectUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateSubjectUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteSubjectUseCase(sl()));
   sl.registerLazySingleton(() => GetFavoriteSubjectsUseCase(sl()));
   sl.registerLazySingleton(() => ToggleFavoriteUseCase(sl()));
 
   sl.registerLazySingleton(() => GetQuestionsBySubjectUseCase(sl()));
+  sl.registerLazySingleton(() => GetAllQuestionsUseCase(sl()));
+  sl.registerLazySingleton(() => GetQuestionByIdUseCase(sl()));
+  sl.registerLazySingleton(() => CreateQuestionUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateQuestionUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteQuestionUseCase(sl()));
 
   sl.registerLazySingleton(() => SaveQuizResultUseCase(sl()));
   sl.registerLazySingleton(() => GetUserResultsUseCase(sl()));
